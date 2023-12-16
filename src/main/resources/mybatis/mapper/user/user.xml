@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--<mapper namespace="com.project.devcenter.mapper.UserMapper">-->
+<mapper namespace="com.choi.publicScheduleMange.mapper.UserMapper">
+    <insert id = "register">
+        INSERT INTO USER_MGT
+        (
+             LOGIN_ID
+            ,DEPT_NO
+            ,PASSWORD
+            ,MEMBER_NAME
+            ,MEMBER_PHONE
+            ,MEMBER_EMAIL
+            ,MEMBER_COMPANY
+        )
+        VALUES
+        (
+             #{loginId}
+            ,#{deptNo}
+            ,#{password}
+            ,#{memberName}
+            ,#{memberPhone}
+            ,#{memberEmail}
+            ,#{memberCompany}
+        )
+    </insert>
+<!--
+
+    <select id = "loginUserByLoginId" resultType="com.choi.publicScheduleMange.model.UserDetail">
+        SELECT *
+        FROM USER_MGT
+        WHERE LOGIN_ID = #{loginId}
+    </select>
+-->
+
+    <select id = "findByLoginId" resultType="com.choi.publicScheduleMange.model.UserMgt">
+        SELECT *
+        FROM USER_MGT
+        WHERE LOGIN_ID = #{name}
+    </select>
+</mapper>

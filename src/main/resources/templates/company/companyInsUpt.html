@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부서정보</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/button.css}">
+
+    <style>
+        .companyInsContainer {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .companyInsContainer input, select {
+            width: 150px;
+            height: 30px;
+            border-radius: 15px;
+            margin-top: 1rem;
+        }
+
+        .companyInsContainer .buttonContainer {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .companyInsContainer button {
+            width: 100px;
+            height: 40px;
+            margin-left: 1rem;
+        }
+
+
+    </style>
+
+</head>
+<body>
+<div class ="companyContainer">
+    <div th:insert="menu.html :: menuFragment"></div>
+
+    <div class="companyInsContainer">
+        <form method="post" action="/company/companyIns" id ="companyInsForm">
+            <div>
+                <input type="text" name="companyId" id="companyId"
+                       th:value="${companyItem.companyId}" hidden/>
+            </div>
+            <div>
+                <label for="companyNm">회사명</label>
+                <input type="text" name="companyNm" id="companyNm"
+                       th:value="${companyItem.companyNm}"/>
+            </div>
+            <div>
+                <label for="useYn">사용여부</label>
+                <select id ="useYn" name ="useYn"
+                        th:value="${companyItem.useYn}">
+                    <option value="Y" selected>사용</option>
+                    <option value="N">미사용</option>
+                </select>
+            </div>
+        </form>
+        <div class = "buttonContainer">
+            <button class ="w-btn w-btn-blue" id="companyInsBtn">등록</button>
+            <button class ="w-btn w-btn-red" id="cancelBtn">취소</button>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+
+    const companyNm = document.getElementById('companyNm');
+    const companyId = document.getElementById('companyId');
+    document.getElementById('cancelBtn').addEventListener('click', e => {window.location.href ="/company"})
+    document.getElementById('companyInsBtn').addEventListener('click', e => {saveData();})
+
+    const saveData = () => {
+        let companyValue = document.getElementById('companyNm').value;
+        if(!companyNm.value) {
+            alert('회사명을 입력하세요.');
+            companyNm.focus();
+            return false;
+        }
+
+        if(companyId == null && companyId === undefined && companyId == "") {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', '/company/checkName?companyName=' + companyValue, true);
+            xhr.send();
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    const data = JSON.parse(xhr.response);
+                    console.log(data);
+                    if (data === 1) {
+                        alert("중복된 회사명입니다.")
+                        return false;
+                    }
+                } else {
+                    console.log("fail");
+                }
+                document.getElementById('companyInsForm').submit();
+            };
+        } else {
+            document.getElementById('companyInsForm').submit();
+        }
+    }
+
+
+
+</script>
+</html>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--<mapper namespace="com.project.devcenter.mapper.UserMapper">-->
+<mapper namespace="com.choi.publicScheduleMange.mapper.ComapnyMapper">
+    <select id="findByCompanyList" resultType="com.choi.publicScheduleMange.model.CompanyMgt">
+        SELECT COMPANY_ID AS COMPANY_ID
+              ,COMPANY_NM AS COMPANY_NM
+              ,USE_YN AS USE_YN
+        FROM COMPANY_MGT
+    </select>
+
+    <select id="findByCheckName" resultType="int">
+        SELECT COUNT(*)
+        FROM COMPANY_MGT
+        WHERE COMPANY_NM = #{companyNm}
+    </select>
+
+    <insert id="insCompanyList">
+        INSERT INTO COMPANY_MGT
+        (
+             COMPANY_ID
+            ,COMPANY_NM
+            ,USE_YN
+        )
+        VALUES
+        (
+            (
+            SELECT CASE
+                   WHEN SUBSTR(COMPANY_ID, -4) IS NULL THEN 'COMPANY_0001'
+                   ELSE CONCAT('COMPANY_',  LPAD(MAX(SUBSTR(COMPANY_ID, -4)+1), 4, 0))
+                    END AS COMPANY_ID
+            FROM COMPANY_MGT AS A
+            )
+          ,#{companyNm}
+          ,#{useYn}
+        )
+    </insert>
+
+    <select id="findByCompanyItem" resultType="com.choi.publicScheduleMange.model.CompanyMgt">
+        SELECT COMPANY_ID AS COMPANY_ID
+              ,COMPANY_NM AS COMPANY_NM
+              ,USE_YN AS USE_YN
+        FROM COMPANY_MGT
+        WHERE COMPANY_ID = #{companyId}
+    </select>
+
+    <delete id="delCompanyList">
+        DELETE
+          FROM COMPANY_MGT
+         WHERE COMPANY_ID = #{companyId}
+    </delete>
+
+    <update id ="uptCompanyList">
+        UPDATE COMPANY_MGT
+           SET COMPANY_NM = #{companyNm}
+              ,USE_YN = #{useYn}
+         WHERE COMPANY_ID = #{companyId}
+    </update>
+</mapper>

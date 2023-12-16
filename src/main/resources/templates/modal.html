@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+
+<div class="modalContainer">
+    <div id="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">일정관리</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div>
+                            <label for="loginId">등록자</label>
+                            <input type="text" name="loginId" id="loginId">
+                        </div>
+                        <div>
+                            <label for="deptNo">회사명</label>
+                            <input type="text" name="deptNo" id="deptNo">
+                        </div>
+                        <div>
+                            <label for="todoContent">할일내용</label>
+                            <input type="text" name="todoContent" id="todoContent">
+                        </div>
+                        <div>
+                            <label for="feedId">피드백</label>
+                            <input type="text" name="feedId" id="feedId">
+                        </div>
+                        <div>
+                            <label for="feedContent">피드백</label>
+                            <input type="text" name="feedContent" id="feedContent">
+                        </div>
+                        <div>
+                            <label for="todoCompleteYn">완료여부</label>
+                            <input type="text" name="todoCompleteYn" id="todoCompleteYn">
+                        </div>
+
+                        <!--                                title:'디비가져온거',
+                                                        start: '2023-10-19',
+                                                        end: '2023-10-20',
+                                                        feedContent: 'feedContent',
+                                                        todoCompleteYn: 'Y',-->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="w-btn w-btn-red" id="modalCloseBtn">닫기</button>
+                    <button type="button" class="w-btn w-btn-blue" id="modalOkayBtn">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

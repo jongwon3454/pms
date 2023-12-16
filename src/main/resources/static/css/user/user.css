@@ -1,0 +1,126 @@
+@import "../reset.css";
+
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+.notosanskr * {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+@font-face {
+    font-family: 'GangwonEdu_OTFBoldA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+body {
+    background: rgba(0, 0, 0, 0.1);
+    font-family: 'notosanskr';
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+li {
+    list-style: none;
+}
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+.loginContainer {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginContainer #login {
+    width: 40%;
+    height: 700px;
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 1px 1px 1px 1px lightgray;
+}
+
+.divGap {
+    margin-top : 1rem;
+    width: 70%;
+}
+
+.loginContainer input {
+    width: 100%;
+    height: 50px;
+    border-radius: 30px;
+    margin-top: 10px;
+    padding: 0 20px;
+    border: 1px solid lightgray;
+    outline: none;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    /*margin-top: 1rem;*/
+}
+
+
+button {
+    margin: 20px;
+    color: black;
+}
+
+ /* 회원가입 */
+.registerContainer {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.registerContainer form {
+    width: 60%;
+    height: 800px;
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 1px 1px 1px 1px lightgray;
+}
+
+.registerContainer input {
+    width: 100%;
+    height: 40px;
+    border-radius: 30px;
+    margin-top: 10px;
+    padding: 0 20px;
+    border: 1px solid lightgray;
+    outline: none;
+}
+
+.registerContainer select {
+    width: 105%;
+    height: 40px;
+    border-radius: 30px;
+    padding: 0 20px;
+    margin-top: 10px;
+
+    /*padding: 0px 20px;*/
+    border: 1px solid lightgray;
+    outline: none;
+}

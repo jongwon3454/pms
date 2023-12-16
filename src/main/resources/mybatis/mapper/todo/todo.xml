@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        <!--<mapper namespace="com.project.devcenter.mapper.UserMapper">-->
+<mapper namespace="com.choi.publicScheduleMange.mapper.TodoMapper">
+
+    <select id = "findByTodoList" resultType="com.choi.publicScheduleMange.model.TodoMgt">
+        SELECT LOGIN_ID AS LOGIN_ID
+              ,COMPANY_ID AS COMPANY_ID
+              ,TODO_NO AS TODO_NO
+              ,FEED_ID AS FEED_ID
+              ,TODO_CONTENT AS TODO_CONTENT
+              ,TODO_START_DATE AS TODO_START_DATE
+              ,TODO_END_DATE AS TODO_END_DATE
+              ,TODO_COMPLETE_YN AS TODO_COMPLETE_YN
+        FROM TODO_MGT
+    </select>
+
+    <insert id = "insTodoList">
+        INSERT INTO TODO_MGT
+        (
+             LOGIN_ID
+            ,COMPANY_ID
+            ,TODO_NO
+            ,FEED_ID
+            ,TODO_CONTENT
+            ,TODO_START_DATE
+            ,TODO_END_DATE
+            ,TODO_COMPLETE_YN
+        )
+        VALUES
+        (
+             'TEST_ID'
+            ,'TEST_COMPANY'
+            ,(
+                SELECT CASE
+                WHEN COMPANY_ID IS NULL THEN 'TODO_0001'
+                ELSE CONCAT('TODO_', LPAD(MAX(SUBSTR(COMPANY_ID, -4)+1), 4, 0))
+                END AS TODO_ID
+                FROM TODO_MGT AS TM
+            )
+            ,#{feedId}
+            ,#{title}
+            ,#{start}
+            ,#{end}
+            ,'N'
+        )
+    </insert>
+</mapper>

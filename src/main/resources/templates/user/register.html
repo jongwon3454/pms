@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link href="/css/user/user.css" rel="stylesheet"/>
+    <link href="/css/button.css" rel="stylesheet"/>
+</head>
+<body>
+<div class = "registerContainer">
+    <form action = "/register" method="post">
+        <h2>회원가입</h2>
+        <div class="divGap">
+            <label for="loginId">ID</label>
+            <input type ="text" name = "loginId" id="loginId"/>
+        </div>
+        <div class="divGap">
+            <label for="password">PW</label>
+            <input type = "password" name = "password" id="password"/>
+        </div>
+        <div class="divGap">
+            <label for="memberName">이름</label>
+            <input type = "text" name = "memberName" id="memberName"/>
+        </div>
+        <div class="divGap">
+            <label for="memberPhone">연락처</label>
+            <input type = "text" name = "memberPhone" placeholder="010-1234-1234" id="memberPhone"/>
+        </div>
+        <div class="divGap">
+            <label for="memberEmail">이메일</label>
+            <input type = "text" name = "memberEmail" id="memberEmail"/>
+        </div>
+
+        <div class="divGap">
+            <label for="companyId">회사명</label>
+            <select name = "companyId" id="companyId">
+                <option th:each="companyList : ${companyList}" th:value="${companyList.companyId}" th:utext="${companyList.companyNm}"></option>
+            </select>
+        </div>
+        <div class="buttonContainer divGap">
+            <button type ="button" class = "w-btn w-btn-blue" id ="regitBtn">회원가입</button>
+            <button type="button" class = "w-btn w-btn-red" id ="cancelBtn">취소</button>
+        </div>
+    </form>
+</div>
+</body>
+    <script>
+
+        let loginId = document.getElementById('loginId');
+        let loginPw = document.getElementById('password');
+        let memberName = document.getElementById('memberName')
+        let memberPhone = document.getElementById('memberPhone');
+        let memberEmail = document.getElementById('memberEmail')
+        let deptNo = document.getElementById('companyId');
+
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+           window.location.href ="/login";
+        });
+
+        document.getElementById('regitBtn').addEventListener('click', () => {
+            if(!loginId.value) {
+                alert("ID를 입력해주세요.")
+                loginId.focus();
+                return false;
+            }
+            if(!loginPw.value) {
+                alert("비밀번호를 입력해주세요.")
+                loginPw.focus();
+                return false;
+            }
+            if(!memberName.value) {
+                alert("이름을 입력해주세요.")
+                memberName.focus();
+                return false;
+            }
+            if(!memberPhone.value) {
+                alert("연락처를 입력해주세요.")
+                memberPhone.focus();
+                return false;
+            }
+            if(!memberEmail.value) {
+                alert("이메일을 입력해주세요.")
+                memberEmail.focus();
+                return false;
+            }
+            if(!deptNo.value) {
+                alert("회사명을 입력해주세요.")
+                deptNo.focus();
+                return false;
+            }
+
+            document.querySelector('.registerContainer form').submit();
+            //Id중복체크
+        })
+
+
+
+
+    </script>
+</html>

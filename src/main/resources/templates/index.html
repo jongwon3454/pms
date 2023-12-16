@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>schdule</title>
+    <!-- fullcalendar -->
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/button.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/main.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+    <body>
+        <div class ="indexContainer">
+            <div th:insert="menu.html :: menuFragment"></div>
+
+            <div class="modalContainer">
+                <div id="modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">일정관리</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class ="modal-gap">
+                                        <label for="loginId">등록자</label>
+                                        <input type="text" name="loginId" id="loginId">
+                                    </div>
+                                    <div class ="modal-gap">
+                                        <label for="companyId">회사명</label>
+                                        <input type="text" name="companyId" id="companyId">
+                                    </div>
+                                    <div class ="modal-gap">
+                                        <label for="todoContent">할일내용</label>
+                                        <input type="text" name="todoContent" id="todoContent">
+                                    </div>
+                                    <div class ="modal-gap">
+                                        <label for="todoStartDate">시작일자</label>
+                                        <input type="date" name="todoStartDate" id="todoStartDate">
+                                    </div>
+                                    <div class ="modal-gap">
+                                        <label for="todoEndDate">종료일자</label>
+                                        <input type="date" name="todoEndDate" id="todoEndDate">
+                                    </div>
+                                    <div>
+                                        <input type="text" name="feedId" id="feedId" hidden>
+                                    </div>
+                                    <div class ="modal-gap">
+                                        <label for="feedContent">피드백</label>
+                                        <input type="text" name="feedContent" id="feedContent">
+                                    </div>
+                                    <div class ="modal-gap">
+                                        <label for="todoCompleteYn">완료여부</label>
+                                        <select name ="todoCompleteYn" id="todoCompleteYn">
+                                            <option value ="N" selected>미완료</option>
+                                            <option value ="Y">완료</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="w-btn w-btn-red" id="modalCloseBtn">닫기</button>
+                                <button type="button" class="w-btn w-btn-blue" id="modalOkayBtn">확인</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class ="calendarContainer">
+                <div id="calendar"></div>
+<!--                <div class ="buttonContainer">
+                    <button class ="btn btn-primary btn-circl" id ="modalOpenBtn">+</button>
+                </div>-->
+            </div>
+        </div>
+    </body>
+<script>
+
+    <!-- Modal -->
+    const modal = document.getElementById("modal");
+
+    document.getElementById("modalCloseBtn").addEventListener('click', () => modalClose());
+
+    let title = document.getElementById('todoContent');
+    let start = document.getElementById('todoStartDate');
+    let end = document.getElementById('todoEndDate');
+
+    <!-- 커스텀 -->
+    let feedContent = document.getElementById('feedContent');
+    let feedId = document.getElementById('feedId');
+    let todoCompleteYn = document.getElementById('todoCompleteYn');
+    let companyId = document.getElementById('companyId');
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev today next myCustomButton mySaveButton',
+                center: 'title',
+                right: 'dayGridMonth timeGridWeek timeGridDay listWeek'
+            },
+            customButtons: {
+                myCustomButton: {
+                    text: "일정 추가하기",
+                    click: function() {
+                        modalOpen();
+                    }
+                },
+                mySaveButton: {
+                    text: "저장하기",
+                    click: function() {
+                        if(confirm("저장하시겠습니까?")) {
+                            saveData();
+                        }
+                    }
+                }
+            },
+            locale: 'ko',
+            expandRow: true, //화면에 맞게 높이 재설정
+            editable: true,
+            droppable: true,
+            selectable: true,
+            selectMirror: true,
+            select: function (arg) { // 일자클릭시 모달호출
+                modalOpen(arg);
+            },
+            eventClick: function (arg) {    // 이벤트클릭시 모달호출
+                modalOpen();
+                console.log(arg);
+            },
+
+            eventResize: function (arg) { //이벤트 사이즈 변경시 모달호출
+                modalOpen();
+                console.log(arg);
+            },
+            events : function(info, successCallback, failureCallback) {
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', '/todo/findByTodoList', true);
+                xhr.send();
+
+                xhr.onload = () => {
+                    if(xhr.status === 200) {
+                        let data = JSON.parse(xhr.response);
+                        console.log(data);
+                        const eventArray = [];
+                        data.forEach((res) => {
+                           eventArray.push({
+                             title: res.todoContent,
+                             start: res.todoStartDate,
+                             end: res.todoEndDate,
+                           });
+                        });
+                        successCallback(eventArray);
+                    } else {
+                        console.log('fail');
+                    }
+                }
+            },
+        });
+        calendar.render();
+
+        document.getElementById('modalOkayBtn').addEventListener('click', () => {
+            let eventData = {
+                title: todoContent.value,
+                start : todoStartDate.value,
+                end : todoEndDate.value,
+            }
+            console.log(eventData);
+/*
+            if(eventData.todoContent === "" && eventData.todoContent === null && eventData.todoContent === undefined) {
+                alert("할일내용을 입력해주세요");
+                todoContent.focus();
+                return false;
+            }
+            if(eventData.todoStartDate === "" && eventData.todoStartDate === null && eventData.todoStartDate === undefined) {
+                alert("시작일을 입력해주세요");
+                todoStartDate.focus();
+                return false;
+            }
+
+            if(eventData.todoEndDate === "" && eventData.todoEndDate === null && eventData.todoEndDate === undefined) {
+                alert("종료일을 입력해주세요");
+                todoEndDate.focus();
+                return false;
+            }
+
+            if(eventData.start > eventData.end) {
+                alert("날짜를 확인해주세요");
+                end.focus();
+                return false;
+            }
+*/
+            calendar.addEvent(eventData);
+            calendar.render();
+            modalClose();
+        });
+
+        let saveData = () => {
+            let allEvent = calendar.getEvents();
+            console.log(allEvent);
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/todo/insTodoList', true);
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send(allEvent);
+
+            xhr.onload = () => {
+                if(xhr.status === 200) {
+                    alert("저장되었습니다");
+                    calendar.render();
+                } else {
+                    alert("실패하였습니다.");
+                }
+            }
+        }
+    });
+
+    // 모달창 닫기
+    let modalClose = () => {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto"; // 스크롤바 보이기
+        initModal();
+    }
+
+    let modalOpen = () => {
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden"; // 스크롤바 제거
+    }
+
+    let initModal = () => {
+        title.value ="";
+        start.value = "";
+        end.value ="";
+    }
+
+</script>
+</html>
+
+<!--
+    https://fullcalendar.io/docs/dynamic-options
+    https://dodokong.tistory.com/41
+    https://dodokong.tistory.com/45
+    https://blog.naver.com/PostView.naver?blogId=iiwvii&logNo=222368096146&parentCategoryNo=&categoryNo=1&viewDate=&isShowPopularPosts=true&from=search
+
+    팝업(모달)만들기
+    https://shin1303.tistory.com/entry/Vanilla-JS-Modal-%EC%B0%BD-%EB%A7%8C%EB%93%A4%EA%B8%B0
+    1. 모달에 피드백추가
+    2. 관리자(회사등록)
+    3. db연동후 저장
+ -->

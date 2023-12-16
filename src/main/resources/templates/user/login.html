@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link href="/css/user/user.css" rel="stylesheet"/>
+    <link href="/css/button.css" rel="stylesheet"/>
+</head>
+<style>
+
+</style>
+<body>
+<div class = "loginContainer">
+    <form method="post" action ="/login" id="login">
+    <h2>Login</h2>
+        <div class = "divGap">
+            <label for="loginId">ID</label>
+            <input type = "text" name = "loginId" id = "loginId"/>
+        </div>
+        <div class = "divGap">
+            <label for="password">PW</label>
+            <input type = "password" name = "password" id ="password"/>
+        </div>
+        <div class = "buttonContainer divGap">
+            <button type = "button" id = "loginBtn" class = "w-btn w-btn-indigo">로그인</button>
+            <button type = "button" id = "registerBtn" class ="w-btn w-btn-blue">회원가입</button>
+        </div>
+    </form>
+</div>
+
+</body>
+<script>
+    let loginId = document.getElementById('loginId');
+    let loginPw = document.getElementById('password');
+
+    document.getElementById('loginBtn').addEventListener('click', () => {
+        goLogin();
+    });
+
+    document.getElementById('registerBtn').addEventListener('click', () => {
+        window.location.href="/register";
+    });
+
+    document.querySelectorAll('.loginContainer input').forEach(login => {
+        login.addEventListener('keydown', e => {
+            if(e.keyCode===13) {
+                goLogin();
+            }
+
+        })
+    });
+
+    goLogin = () => {
+        if(!loginId.value) {
+            alert("ID를 입력해주세요.")
+            loginId.focus();
+            return false;
+        }
+
+        if(!loginPw.value) {
+            alert("비밀번호를 입력해주세요")
+            loginPw.focus();
+            return false;
+        }
+
+        document.getElementById('login').submit();
+    }
+</script>
+</html>
